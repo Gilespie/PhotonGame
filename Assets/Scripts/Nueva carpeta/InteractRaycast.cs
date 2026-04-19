@@ -8,7 +8,7 @@ public class InteractRaycast : GroundRaycast
     {
         _ray = new Ray(_originPoint.position, direction);
 
-        return _isHitted = Physics.SphereCast(_ray, _intRadius, out _hit, _rayDistance, _affectedLayer);
+        return _isHitted = Runner.GetPhysicsScene().SphereCast(_ray.origin, _intRadius, _ray.origin + direction, out _hit, _rayDistance, _affectedLayer); ;
     }
 
     private new void OnDrawGizmos()

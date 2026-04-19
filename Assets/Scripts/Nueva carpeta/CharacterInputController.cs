@@ -11,44 +11,46 @@ public class CharacterInputController : NetworkBehaviour
     [SerializeField] KeyCode _interactKey = KeyCode.E;
     [SerializeField] KeyCode _ragdollKey = KeyCode.R;
 
-    bool _isCrouching = false;
-    public bool IsCrouching => _isCrouching;
+    bool _isCrouchPressed = false;
+    public bool IsCrouchPressed => _isCrouchPressed;
 
-    bool _isJumping = false;
-    public bool IsJumping => _isJumping;
+    bool _isJumpPressed = false;
+    public bool IsJumpPressed => _isJumpPressed;
 
-    bool _isSprinting = false;
-    public bool IsSprinting => _isSprinting;
+    bool _isSprintPressed = false;
+    public bool IsSprintPressed => _isSprintPressed;
 
-    bool _isInteracting = false;
-    public bool IsInteracting => _isInteracting;
+    bool _isInteractPressed = false;
+    public bool IsInteractPressed => _isInteractPressed;
 
-    bool _isShooting = false;
-    public bool IsShooted => _isShooting;
+    bool _isShootPressed = false;
+    public bool IsShootPressed => _isShootPressed;
 
-    bool _isRagdoll = false;
+    bool _isRagdollPressed = false;
+    public bool IsRagdollPressed => _isRagdollPressed;
 
-    public bool IsRagdoll => _isRagdoll;
-
-    Vector3 _direction;
-    public Vector3 Direction => _direction;
+    Vector3 _directionPressed;
+    public Vector3 DirectionPressed => _directionPressed;
 
     public void ArtificialUpdate()
     {
-        _direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        _directionPressed = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 
-        if (Input.GetKeyDown(_crouchKey)) _isCrouching = !_isCrouching;
-        if (Input.GetKeyDown(_sprintKey)) _isSprinting = !_isSprinting;
+        if (Input.GetKeyDown(_crouchKey)) _isCrouchPressed = !_isCrouchPressed;
+        if (Input.GetKeyDown(_sprintKey)) _isSprintPressed = !_isSprintPressed;
 
-        if (Input.GetKeyDown(_jumpKey)) _isJumping = true;
-        //else _isJumping = false;
+        if (Input.GetKeyDown(_jumpKey)) _isJumpPressed = true;
+        else _isJumpPressed = false;
 
-        if (Input.GetKeyDown(_interactKey)) _isInteracting = true;
-       // else _isInteracting = false;
+        if(Input.GetKeyDown(_interactKey))
+        {
+            _isInteractPressed = true;
+        }
+        else _isInteractPressed = false;
 
-        if(Input.GetKeyDown(KeyCode.R)) _isRagdoll = !_isRagdoll;
+        if(Input.GetKeyDown(KeyCode.R)) _isRagdollPressed = !_isRagdollPressed;
 
-        if (Input.GetKey(_shootKey)) _isShooting = true;
-        else _isShooting = false;
+        if (Input.GetKey(_shootKey)) _isShootPressed = true;
+        else _isShootPressed = false;
     }
 }

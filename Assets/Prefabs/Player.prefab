@@ -860,7 +860,7 @@ Transform:
   m_GameObject: {fileID: 2031725884522679138}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.31500006, z: 0.762}
+  m_LocalPosition: {x: -0, y: 0.534, z: 0.955}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1335,7 +1335,7 @@ Transform:
   m_GameObject: {fileID: 2792354098147503641}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.9, z: 0}
+  m_LocalPosition: {x: 0, y: -0.917, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1909,7 +1909,7 @@ MonoBehaviour:
   _rayDistance: 0.45
   _affectedLayer:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4215
 --- !u!114 &8742799346939261472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3764,7 +3764,7 @@ MonoBehaviour:
   _crouchSpeed: 3
   _crouchColHeight: 1
   _crouchColCenter: 1
-  _fireRate: 0.5
+  _fireRate: 2
   _ragdoll: {fileID: 148318375279938702}
   _bulletPrefab: {fileID: 1217798746265308364, guid: b878f6d4bdde3a048aadb6b9aa92e891, type: 3}
   _bulletSpawnerTransform: {fileID: 7727456108760245126}

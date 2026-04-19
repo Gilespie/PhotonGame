@@ -14,7 +14,7 @@ public class GroundRaycast : NetworkBehaviour
     {
         _ray = new Ray(_originPoint.position, direction);
 
-        return _isHitted = Physics.Raycast(_ray, _rayDistance, _affectedLayer);
+        return _isHitted = Runner.GetPhysicsScene().Raycast(_ray.origin, _ray.direction, out _hit, _rayDistance, _affectedLayer);
     }
 
     protected virtual void OnDrawGizmos()

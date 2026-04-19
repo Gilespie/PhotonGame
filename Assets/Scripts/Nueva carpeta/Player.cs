@@ -42,12 +42,10 @@ public class Player : NetworkBehaviour
     bool _canShootNow;
     bool _isCrouching;
     bool _isRagdoll;
-
-
+    bool _isOnAir;
     Camera _camera;
     NetworkRigidbody3D _rb;
     Vector3 _direction;
-
     //int _randomMeshIndex = 0;
 
     public override void Spawned()
@@ -58,7 +56,8 @@ public class Player : NetworkBehaviour
         _timer = _fireRate;
         
         _ragdoll.DisableRagdoll();
-        /* _randomMeshIndex = UnityEngine.Random.Range(0, _meshSelector.MecanimAnims.Length);
+
+        /*_randomMeshIndex = UnityEngine.Random.Range(0, _meshSelector.MecanimAnims.Length);
 
          _meshSelector.SelectMesh(_randomMeshIndex);
          _animationController.SetAnimator(_meshSelector.MecanimAnims[_randomMeshIndex]);*/
@@ -79,16 +78,32 @@ public class Player : NetworkBehaviour
         _isGround = _groundRaycast.IsRaycasting(Vector3.down);
         //_isInteract = _interactRaycast.IsRaycasting(_characterRotator.transform.forward);
 
-        _isJumping = _inputController.IsJumping;
-        _isShooting = _inputController.IsShooted;
-        _isCrouching = _inputController.IsCrouching;
-        _direction = _inputController.Direction;
-        _isRagdoll = _inputController.IsRagdoll;
+        if(_inputController.IsJumpPressed && _isGround)
+        {
+            _isJumping = true;
+        }
+
+        if (_inputController.IsCrouchPressed)
+        {
+            _isCrouching = true;
+        }
+        else
+        {
+            _isCrouching = false;
+        }
+        
+        _isShooting = _inputController.IsShootPressed;
+        _direction = _inputController.DirectionPressed;
+        _isRagdoll = _inputController.IsRagdollPressed;
 
         _timer -= Runner.DeltaTime;
         _timer = Mathf.Clamp(_timer, 0, _fireRate);
 
         _canShootNow = _timer <= 0f;
+
+        _isOnAir = !_isGround;
+
+        _animationController.SetBool(AnimParams.Air, _isOnAir);
     }
         
     public override void FixedUpdateNetwork()
@@ -104,7 +119,7 @@ public class Player : NetworkBehaviour
             RPC_ActivateRagdoll(false);
         }
 
-        if (_isJumping && _isGround)
+        if (_isJumping && !_isCrouching)
         {
             Jump();
         }
@@ -115,7 +130,7 @@ public class Player : NetworkBehaviour
             _timer = _fireRate;
         }
 
-        if (_isCrouching && _isGround)
+        if (_isCrouching && !_isJumping)
         {
             Crouch();
         }
@@ -124,7 +139,7 @@ public class Player : NetworkBehaviour
             Uncrouch();
         }
 
-        _characterRotator.RotateDefault(_inputController.Direction);
+        _characterRotator.RotateDefault(_inputController.DirectionPressed);
     }
 
     void Movement()
@@ -138,8 +153,11 @@ public class Player : NetworkBehaviour
 
     void Jump()
     {
+        if(!_isJumping) return;
+
         _animationController.SetTrigger(AnimParams.Jump);
         _rb.Rigidbody.linearVelocity = Vector3.up * _jumpForce;
+        _isJumping = false;
     }
 
     void SpawnShot()
@@ -150,11 +168,13 @@ public class Player : NetworkBehaviour
     void Crouch()
     {
         _colliderResizer.SetSize(1, new Vector3(0, -0.5f, 0));
+        _animationController.SetBool(AnimParams.Crouch, true);
     }
 
     void Uncrouch()
     {
         _colliderResizer.SetSize(2, new Vector3(0, 0, 0));
+        _animationController.SetBool(AnimParams.Crouch, false);
     }
 
     //Hacer una funcion local para recibir daño y que llame a la funcion de morir cuando la vida sea <= 0
