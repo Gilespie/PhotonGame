@@ -8,6 +8,7 @@ public class Weapon : NetworkBehaviour
     [SerializeField] GameObject _bulletPrefab;
     [SerializeField] Transform _shotSpawnTransform;
     [Networked] public bool _readyToFire { get; private set; }
+    public bool ReadyToFire => Object != null && Object.IsValid && _readyToFire;
     public event Action OnShot = delegate { };
     [Networked] TickTimer _tickTimer { get; set; }
 

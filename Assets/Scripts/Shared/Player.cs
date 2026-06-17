@@ -55,7 +55,7 @@ public class Player : NetworkBehaviour
             _movement.Jump(_isGround);
         }
 
-        if (inputs.networkButtons.IsSet(MyButtons.Shoot) && _weapon._readyToFire && !inputs.networkButtons.IsSet(MyButtons.Sprint))
+        if (inputs.networkButtons.IsSet(MyButtons.Shoot) && _weapon.ReadyToFire && !inputs.networkButtons.IsSet(MyButtons.Sprint))
         {
             _weapon.Fire();
         }
