@@ -8,7 +8,7 @@ public class GameManager : NetworkBehaviour
 
     [SerializeField] private GameObject _winImage;
     [SerializeField] private GameObject _loseImage;
-    private List<PlayerRef> _players;//PlayerRef sirve como identificacion de cada cliente conectado
+    private List<PlayerRef> _players;   //PlayerRef sirve como identificacion de cada cliente conectado
 
     private void Awake()
     {
@@ -33,29 +33,7 @@ public class GameManager : NetworkBehaviour
     [Rpc(RpcSources.All, RpcTargets.All)]
     public void RPC_Defeat(PlayerRef loser)
     {
-        /*_players.Remove(loser);
-
-        if (loser == Runner.LocalPlayer)
-            ShowDefeatPanel();
-
-        if (!HasStateAuthority) return;
-
-        switch (_players.Count)
-        {
-            case 1:
-                RPC_Win(_players[0]);
-                break;
-
-            case 0:
-                RPC_Draw();
-                break;
-        }*/
-
-        //Debug.Log($"[GameManager] Defeat called for {loser}, before remove: {_players.Count}");
-
         bool removed = _players.Remove(loser);
-
-        //Debug.Log($"[GameManager] Removed: {removed}, after remove: {_players.Count}");
 
         if (loser == Runner.LocalPlayer)
             ShowDefeatPanel();

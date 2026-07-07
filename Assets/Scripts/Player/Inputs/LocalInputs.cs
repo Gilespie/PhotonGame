@@ -9,6 +9,7 @@ public class LocalInputs : MonoBehaviour
     private bool _isInteractPressed;
     private bool _isCrouchPressed;
     private bool _isSprintPressed;
+    private bool _isPausePressed;
 
     [Header("Keys")]
     [SerializeField] KeyCode _jumpKey = KeyCode.W;
@@ -16,25 +17,16 @@ public class LocalInputs : MonoBehaviour
     [SerializeField] KeyCode _sprintKey = KeyCode.LeftShift;
     [SerializeField] KeyCode _crouchKey = KeyCode.LeftControl;
     [SerializeField] KeyCode _interactKey = KeyCode.E;
+    [SerializeField] KeyCode _pauseKey = KeyCode.Escape; 
 
     void Update()
     {
-        //_networkInputData.movementInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-
-        /*if (Input.GetKeyDown(KeyCode.Space))
-        {
-            _isFirePressed = true;
-        }
-
-        //_isFirePressed |= Input.GetKeyDown(KeyCode.Space);
-        
-        _isJumpPressed |= Input.GetKeyDown(KeyCode.W);*/
-
         _isJumpPressed |= Input.GetKeyDown(_jumpKey);
         _isFirePressed |= Input.GetKey(_shootKey);
         _isInteractPressed |= Input.GetKeyDown(_interactKey);
         _isCrouchPressed |= Input.GetKey(_crouchKey);
         _isSprintPressed |= Input.GetKey(_sprintKey);
+        _isPausePressed |= Input.GetKeyDown(_pauseKey);
     }
 
     public NetworkInputData GetLocalInputs()
@@ -57,6 +49,9 @@ public class LocalInputs : MonoBehaviour
 
         _networkInputData.networkButtons.Set(MyButtons.Shoot, _isFirePressed);
         _isFirePressed = false;
+
+        _networkInputData.networkButtons.Set(MyButtons.Pause, _isPausePressed);
+        _isPausePressed = false;
 
         return _networkInputData;
     }

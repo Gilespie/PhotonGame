@@ -9,6 +9,7 @@ public struct NetworkInputData : INetworkInput
     public NetworkBool IsSprintPressed;
     public NetworkBool IsCrouchPressed;
     public NetworkBool IsInteractPressed;
+    public NetworkBool IsPausePressed;
 
     public NetworkButtons networkButtons;
 }
@@ -19,5 +20,6 @@ enum MyButtons
     Shoot,
     Sprint,
     Crouch,
-    Interact
+    Interact,
+    Pause
 }
