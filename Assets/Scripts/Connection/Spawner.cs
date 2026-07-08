@@ -64,7 +64,9 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
             ? _spawnPoints[spawnIndex].position
             : Vector3.zero;
 
-        runner.Spawn(_playerPrefab, pos, Quaternion.identity, player);
+        NetworkObject playerObject = runner.Spawn(_playerPrefab, pos, Quaternion.identity, player);
+        //runner.Spawn(_playerPrefab, pos, Quaternion.identity, player);
+        runner.SetPlayerObject(player, playerObject);
     }
 
     public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)

@@ -7,10 +7,12 @@ public class HealthView : MonoBehaviour
 
     void Start()
     {
-        _lifeBarItem = LifeBarHandler.Instance.AddLifeBar(_health);
-
-        _health.OnHealthUpdate += UpdateBar;
-        _health.OnLeft += RemoveBar;
+        if(_lifeBarItem != null)
+        {
+            _lifeBarItem = LifeBarHandler.Instance.AddLifeBar(_health);
+            _health.OnHealthUpdate += UpdateBar;
+            _health.OnLeft += RemoveBar;
+        }
     }
 
     void UpdateBar(float normalized)

@@ -22,6 +22,7 @@ public class MovementComponent : NetworkBehaviour
     [Networked] public bool IsGrounded { get; private set; }
     [Networked] public float MovementMagnitude { get; private set; }
 
+
     private void Awake()
     {
         _currentSpeed = _defaultSpeed;

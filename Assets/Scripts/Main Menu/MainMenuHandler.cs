@@ -8,18 +8,22 @@ public class MainMenuHandler : MonoBehaviour
 
     [Header("Panels")]
     [SerializeField] private GameObject _initialPanel;
-    [SerializeField] private GameObject _joinPanel;
     [SerializeField] private GameObject _creditsPanel;
+    [SerializeField] private GameObject _profilePanel;
     [SerializeField] private GameObject _statusPanel;
     [SerializeField] private GameObject _sessionBrowserPanel;
     [SerializeField] private GameObject _hostGamePanel;
 
     [Header("Buttons")]
-    [SerializeField] private Button _joinLobbyBTN;
     [SerializeField] private Button _hostPanelBTN;
     [SerializeField] private Button _hostGameBTN;
     [SerializeField] private Button _creditsBTN;
-    [SerializeField] private Button _backBTN;
+    [SerializeField] private Button _profileBTN;
+    [SerializeField] private Button _saveSkinBTN1;
+    [SerializeField] private Button _saveSkinBTN2;
+    [SerializeField] private Button _saveNicknameBTN;
+    [SerializeField] private Button _backFromCreditsBTN;
+    [SerializeField] private Button _backFromProfileBTN;
     [SerializeField] private Button _playBTN;
     [SerializeField] private Button _exitBTN;
 
@@ -30,15 +34,22 @@ public class MainMenuHandler : MonoBehaviour
     [Header("Texts")]
     [SerializeField] private TMP_Text _statusText;
 
+    [SerializeField] int[] _skins;
+
     void Start()
     {
-        _joinLobbyBTN.onClick.AddListener(Btn_JoinLobby);
+        _playBTN.onClick.AddListener(Btn_JoinLobby);
         _hostPanelBTN.onClick.AddListener(Btn_ShowHostPanel);
         _hostGameBTN.onClick.AddListener(Btn_CreateGameSession);
         _creditsBTN.onClick.AddListener(Btn_CreditsPanel);
-        _backBTN.onClick.AddListener(Btn_Back);
-        _playBTN.onClick.AddListener(Btn_Play);
+        _backFromCreditsBTN.onClick.AddListener(Btn_CreditsBack);
+        _backFromProfileBTN.onClick.AddListener(Btn_ProfileBack);
         _exitBTN.onClick.AddListener(Btn_Quit);
+        _profileBTN.onClick.AddListener(Btn_ProfilePanel);
+
+        _saveSkinBTN1.onClick.AddListener(Btn_SaveSkinPlayer);
+        _saveSkinBTN2.onClick.AddListener(Btn_SaveSkinPlayer2);
+        _saveNicknameBTN.onClick.AddListener(Btn_SaveNickName);
 
         _networkRunnerHandler.OnJoinedLobby += () =>
         {
@@ -51,12 +62,26 @@ public class MainMenuHandler : MonoBehaviour
     {
         _networkRunnerHandler.JoinLobby();
 
-        PlayerPrefs.SetString("Nickname", _nicknameField.text);
-
         _initialPanel.SetActive(false);
         _statusPanel.SetActive(true);
 
         _statusText.text = "Joining Lobby...";
+    }
+
+    void Btn_SaveSkinPlayer()
+    {
+        PlayerPrefs.SetString("PlayerSkin", _skins[0].ToString());
+        
+    }
+
+    void Btn_SaveSkinPlayer2()
+    {
+        PlayerPrefs.SetString("PlayerSkin", _skins[1].ToString());
+    }
+
+    void Btn_SaveNickName()
+    {
+        PlayerPrefs.SetString("Nickname", _nicknameField.text);
     }
 
     void Btn_ShowHostPanel()
@@ -78,16 +103,22 @@ public class MainMenuHandler : MonoBehaviour
         _creditsPanel.SetActive(true);
     }
 
-    void Btn_Back()
+    void Btn_CreditsBack()
     {
         _initialPanel.SetActive(true);
         _creditsPanel.SetActive(false);
     }
 
-    void Btn_Play()
+    void Btn_ProfilePanel()
     {
         _initialPanel.SetActive(false);
-        _joinPanel.SetActive(true);
+        _profilePanel.SetActive(true);
+    }
+
+    void Btn_ProfileBack()
+    {
+        _initialPanel.SetActive(true);
+        _profilePanel.SetActive(false);
     }
 
     void Btn_Quit()

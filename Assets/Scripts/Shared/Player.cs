@@ -20,15 +20,14 @@ public class Player : NetworkBehaviour
 
     Camera _camera;
     
-    //[SerializeField] CharacterMeshSelector _meshSelector;
-    //int _randomMeshIndex = 0;
+    [SerializeField] CharacterMeshSelector _meshSelector;
 
     public override void Spawned()
     {
-        /*_randomMeshIndex = UnityEngine.Random.Range(0, _meshSelector.MecanimAnims.Length);
+        int selectedMeshIndex = PlayerPrefs.GetInt("PlayerSkin");
 
-         _meshSelector.SelectMesh(_randomMeshIndex);
-         _animationController.SetAnimator(_meshSelector.MecanimAnims[_randomMeshIndex]);*/
+        _meshSelector.SelectMesh(selectedMeshIndex);
+        //_animationController.SetAnimator(_meshSelector.MecanimAnims[selectedMeshIndex]);
 
         if (HasInputAuthority)
         {
