@@ -1,10 +1,11 @@
+using Fusion;
+using Fusion.Sockets;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-using Fusion;
-using Fusion.Sockets;
 using UnityEngine.SceneManagement;
+using static UnityEngine.Rendering.GPUSort;
 
 public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
 {
@@ -37,7 +38,7 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
         }
         else
         {
-            //Debug.Log($"[Custom Msg] Joined Lobby");
+            Debug.Log($"[Custom Msg] Joined Lobby");
 
             OnJoinedLobby();
         }
@@ -46,9 +47,14 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     #endregion
 
     #region StartGame
-    public async void CreateGame(string sessionName, string sceneName)
+    public async void CreateGame(string sessionName, string sceneName, bool friendlyFire)
     {
-        await InitializeGame(GameMode.Host, sessionName, SceneUtility.GetBuildIndexByScenePath($"Scenes/{sceneName}"));
+        var sessionProperties = new Dictionary<string, SessionProperty>
+        {
+            ["FriendlyFire"] = friendlyFire
+        };
+
+        await InitializeGame(GameMode.Host, sessionName, SceneUtility.GetBuildIndexByScenePath($"Scenes/{sceneName}"), sessionProperties);
     }
     
     public async void JoinGame(SessionInfo sessionInfo)
@@ -56,21 +62,25 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
         await InitializeGame(GameMode.Client, sessionInfo.Name, SceneManager.GetActiveScene().buildIndex);
     }
     
-    async Task InitializeGame(GameMode gameMode, string sessionName, int sceneIndex)
+    async Task InitializeGame(GameMode gameMode, string sessionName, int sceneIndex, Dictionary<string, SessionProperty> sessionProperties = null)
     {
         _currentRunner.ProvideInput = true;
 
         int skinIndex = PlayerPrefs.GetInt("PlayerSkin", 0);
-        //Debug.Log("[Custom Msg] Player Skin Index: " + skinIndex);
 
-        var result = await _currentRunner.StartGame(new StartGameArgs()
+        var args = new StartGameArgs()
         {
             GameMode = gameMode,
             Scene = SceneRef.FromIndex(sceneIndex),
             SessionName = sessionName,
             ConnectionToken = BitConverter.GetBytes(skinIndex)
-        });
-        
+        };
+
+        if (sessionProperties != null)
+            args.SessionProperties = sessionProperties;
+
+        var result = await _currentRunner.StartGame(args);
+
         if (!result.Ok)
         {
             Debug.LogError($"[Custom Error] Unable to Start Game");

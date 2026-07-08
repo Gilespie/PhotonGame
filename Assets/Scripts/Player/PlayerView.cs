@@ -9,6 +9,7 @@ public class PlayerView : NetworkBehaviour
     [SerializeField] MovementComponent _movement;
     [SerializeField] HealthSystem _healthSystem;
     [SerializeField] Ragdoll _ragdoll;
+    [SerializeField] ParticleSystem _bloodVFX;
 
     private int _lastJumpCounter;
     private bool _lastCrouchState;
@@ -19,6 +20,7 @@ public class PlayerView : NetworkBehaviour
 
         _healthSystem.OnDeadChanged += OnDeadStateChanged;
         _healthSystem.OnRespawn += OnRespawned;
+        _healthSystem.OnHit += OnHited;
 
         _lastJumpCounter = _movement.JumpCounter;
         _lastCrouchState = _movement.IsCrouching;
@@ -67,5 +69,10 @@ public class PlayerView : NetworkBehaviour
     void OnRespawned()
     {
         _ragdoll.DisableRagdoll();
+    }
+
+    void OnHited()
+    {
+        _bloodVFX.Play();
     }
 }

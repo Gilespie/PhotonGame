@@ -15,6 +15,7 @@ public class HealthSystem : NetworkBehaviour
     public event Action<float> OnHealthUpdate = delegate { };
     public event Action<bool> OnDeadChanged = delegate { };
     public event Action OnRespawn = delegate { };
+    public event Action OnHit = delegate { };
 
     public event Action OnLeft = delegate { };
 
@@ -49,6 +50,7 @@ public class HealthSystem : NetworkBehaviour
         if (damage <= 0 || IsDead) return;
 
         CurrentHealth = MathF.Max(CurrentHealth - damage, 0);
+        OnHit();
 
         if (CurrentHealth <= 0)
         {

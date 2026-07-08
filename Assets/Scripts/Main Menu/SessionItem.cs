@@ -8,6 +8,7 @@ public class SessionItem : MonoBehaviour
 {
     [SerializeField] private TMP_Text _name;
     [SerializeField] private TMP_Text _playerCount;
+    [SerializeField] private TMP_Text _friendlyFire;
     [SerializeField] private Button _joinBtn;
 
     private SessionInfo _sessionInfo;
@@ -25,7 +26,10 @@ public class SessionItem : MonoBehaviour
 
         _name.text = _sessionInfo.Name;
         _playerCount.text = $"{_sessionInfo.PlayerCount}/{_sessionInfo.MaxPlayers}";
-        
+
+        bool friendlyFire = _sessionInfo.Properties.TryGetValue("FriendlyFire", out var value) && (bool)value;
+        _friendlyFire.text = friendlyFire ? "Friendly Fire: On" : "Friendly Fire: Off";
+
         _joinBtn.enabled = _sessionInfo.PlayerCount < _sessionInfo.MaxPlayers;
     }
     

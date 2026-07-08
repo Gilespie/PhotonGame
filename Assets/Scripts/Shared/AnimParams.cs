@@ -7,4 +7,5 @@ public static class AnimParams
     public static readonly int Speed = Animator.StringToHash("moveSpeed");
     public static readonly int Jump = Animator.StringToHash("onJump");
     public static readonly int Press = Animator.StringToHash("onPressed");
+    public static readonly int Attack = Animator.StringToHash("isAttack");
 }

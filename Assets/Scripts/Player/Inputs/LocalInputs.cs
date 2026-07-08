@@ -35,6 +35,8 @@ public class LocalInputs : MonoBehaviour
 
         _networkInputData.MovementInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 
+        _networkInputData.AimDirection = GetAimDirection();
+
         _networkInputData.networkButtons.Set(MyButtons.Interact, _isInteractPressed);
         _isInteractPressed = false;
 
@@ -54,5 +56,22 @@ public class LocalInputs : MonoBehaviour
         _isPausePressed = false;
 
         return _networkInputData;
+    }
+
+    Vector3 GetAimDirection()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+
+        if (groundPlane.Raycast(ray, out float distance))
+        {
+            Vector3 worldPoint = ray.GetPoint(distance);
+            Vector3 direction = worldPoint - transform.position;
+            direction.y = 0f; 
+
+            return direction;
+        }
+
+        return transform.forward;
     }
 }

@@ -14,8 +14,8 @@ public class EnemyAvatar : NetworkBehaviour
         _parent.SetBoolAttacking(false);
     }
 
-    /*public void ApplyDamage()
+    public void ApplyDamage()
     {
         _parent.ApplyDamage();
-    }*/
+    }
 }

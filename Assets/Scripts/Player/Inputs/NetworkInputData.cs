@@ -4,6 +4,7 @@ using UnityEngine;
 public struct NetworkInputData : INetworkInput
 {
     public Vector3 MovementInput;
+    public Vector3 AimDirection;
     public NetworkBool IsFirePressed;
     public NetworkBool IsJumpPressed;
     public NetworkBool IsSprintPressed;

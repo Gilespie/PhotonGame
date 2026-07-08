@@ -19,9 +19,9 @@ TagManager:
   - Ragdoll
   - Ground
   - Damageable
-  - 
-  - 
-  - 
+  - Enemy
+  - Collectible
+  - Bullet
   - 
   - 
   - 

@@ -36,11 +36,20 @@ public class BulletShared : NetworkBehaviour
     {
         if (!Object || !Object.HasStateAuthority) return;
 
-        if (other.TryGetComponent(out HealthSystem health))
+        if (other.TryGetComponent(out HealthSystem health) && ShouldDamage(health))
         {
             health.RPC_TakeDamage(_damage);
         }
 
         Runner.Despawn(Object);
+    }
+
+    bool ShouldDamage(HealthSystem targetHealth)
+    {
+        if (!targetHealth.TryGetComponent(out Player _)) return true;
+
+        bool friendlyFire = Runner.SessionInfo.Properties.TryGetValue("FriendlyFire", out var value) && (bool)value;
+
+        return friendlyFire;
     }
 }

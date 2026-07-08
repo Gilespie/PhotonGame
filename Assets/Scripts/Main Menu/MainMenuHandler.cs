@@ -6,6 +6,9 @@ public class MainMenuHandler : MonoBehaviour
 {
     [SerializeField] private NetworkRunnerHandler _networkRunnerHandler;
 
+    [Header("Host Settings")]
+    [SerializeField] private Toggle _friendlyFireToggle;
+
     [Header("Panels")]
     [SerializeField] private GameObject _initialPanel;
     [SerializeField] private GameObject _creditsPanel;
@@ -94,7 +97,7 @@ public class MainMenuHandler : MonoBehaviour
     {
         _hostGameBTN.interactable = false;
 
-        _networkRunnerHandler.CreateGame(_sessionName.text, "Game");
+        _networkRunnerHandler.CreateGame(_sessionName.text, "Game", _friendlyFireToggle.isOn);
     }
 
     void Btn_CreditsPanel()

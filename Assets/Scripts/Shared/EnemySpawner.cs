@@ -7,27 +7,28 @@ public class EnemySpawner : NetworkBehaviour
     [SerializeField] Transform[] _spawnPoints;
     [SerializeField] float _spawnInterval = 0.3f;
     [SerializeField] GameObject _enemyPrefab;
-
+    [SerializeField] int _enemyMaxCount = 50;
+    [Networked] TickTimer _tickTimer { get; set; }
     readonly List<Player> _players = new List<Player>();
-    float _timer;
     int _randomPlayerIndex;
     int _randomSpawnPosIndex;
+    int _enemyCount;
 
-    void Start()
+    public override void Spawned()
     {
-        _timer = _spawnInterval;
+        _tickTimer = TickTimer.CreateFromSeconds(Runner, _spawnInterval);
     }
 
     public override void FixedUpdateNetwork()
     {
         if (!HasStateAuthority) return;
+        if (Runner.SessionInfo.PlayerCount < GameManager.Instance.MinPlayersToStart) return;
 
-        _timer -= Runner.DeltaTime;
-
-        if(_timer <= 0)
-        {             
+        if (_tickTimer.Expired(Runner) && _enemyCount < _enemyMaxCount)
+        {
             Spawn();
-            _timer = _spawnInterval;
+            _enemyCount++;
+            _tickTimer = TickTimer.CreateFromSeconds(Runner, _spawnInterval);
         }
     }
 
@@ -57,7 +58,10 @@ public class EnemySpawner : NetworkBehaviour
         _randomPlayerIndex = Random.Range(0, playersCount);
         _randomSpawnPosIndex = Random.Range(0, _spawnPoints.Length);
 
-        NetworkObject enemy = Runner.Spawn(_enemyPrefab, _spawnPoints[_randomSpawnPosIndex].position, Quaternion.identity);
-        enemy.GetComponent<Enemy>().SetTarget(_players[_randomPlayerIndex]);
+        NetworkObject enemyObj = Runner.Spawn(_enemyPrefab, _spawnPoints[_randomSpawnPosIndex].position, Quaternion.identity);
+        var enemy = enemyObj.GetComponent<Enemy>();
+
+        enemy.SetTarget(_players[_randomPlayerIndex]);
+        enemy.OnEnemyDead += () => _enemyCount--;
     }
 }

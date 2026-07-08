@@ -54,6 +54,6 @@ public class Player : NetworkBehaviour
         _movement.SetCrouch(inputs.networkButtons.IsSet(MyButtons.Crouch));
         _movement.SetSprint(inputs.networkButtons.IsSet(MyButtons.Sprint));
 
-        _characterRotator.RotateDefault(inputs.MovementInput);
+        _characterRotator.RotateDefault(inputs.AimDirection);
     }
 }

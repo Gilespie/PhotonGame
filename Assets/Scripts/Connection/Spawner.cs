@@ -7,7 +7,6 @@ using Fusion.Sockets;
 public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField] private NetworkPrefabRef[] _playerPrefabs;
-    [SerializeField] private int _minPlayersToStart = 2;
     [SerializeField] private Transform[] _spawnPoints;
     private bool _matchStarted;
     private LocalInputs _localInputs;
@@ -33,7 +32,7 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 
         int count = runner.SessionInfo.PlayerCount;
 
-        if (count >= _minPlayersToStart)
+        if (count >= GameManager.Instance.MinPlayersToStart)
         {
             _matchStarted = true;
             int index = 0;
@@ -73,7 +72,6 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
     private int GetSkinIndex(NetworkRunner runner, PlayerRef player)
     {
         byte[] token = runner.GetPlayerConnectionToken(player);
-       //Debug.Log($"[Spawner] player={player}, token={(token == null ? "NULL" : BitConverter.ToInt32(token, 0).ToString())}");
 
         if (token == null || token.Length < sizeof(int)) return 0;
 

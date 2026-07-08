@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Fusion;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : NetworkBehaviour
 {
@@ -8,6 +9,16 @@ public class GameManager : NetworkBehaviour
 
     [SerializeField] private GameObject _winImage;
     [SerializeField] private GameObject _loseImage;
+
+    [Header("Waiting Room")]
+    [SerializeField] private GameObject _waitingPanel;
+    [SerializeField] private int _minPlayersToStart = 2;
+    public int MinPlayersToStart => _minPlayersToStart;
+
+    [SerializeField] Button _rtmButton1;
+    [SerializeField] Button _rtmButton2;
+    [SerializeField] Button _rtmButton3;
+
     private List<PlayerRef> _players;   //PlayerRef sirve como identificacion de cada cliente conectado
 
     private void Awake()
@@ -15,7 +26,18 @@ public class GameManager : NetworkBehaviour
         Instance = this;
 
         _players = new List<PlayerRef>();
+
+        _rtmButton1.onClick.AddListener(ReturnToMenu);
+        _rtmButton2.onClick.AddListener(ReturnToMenu);
+        _rtmButton3.onClick.AddListener(ReturnToMenu);
     }
+
+    public override void Render()
+    {
+        bool waiting = Runner.SessionInfo.PlayerCount < _minPlayersToStart;
+        _waitingPanel.SetActive(waiting);
+    }
+
 
     public void AddToList(Player player)
     {
@@ -74,5 +96,18 @@ public class GameManager : NetworkBehaviour
     void ShowDefeatPanel()
     {
         _loseImage.SetActive(true);
+    }
+
+    async void ReturnToMenu()
+    {
+        _rtmButton1.interactable = false;
+        _rtmButton2.interactable = false;
+
+        var runner = Runner;
+
+        if (runner != null)
+            await runner.Shutdown();
+
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
     }
 }
