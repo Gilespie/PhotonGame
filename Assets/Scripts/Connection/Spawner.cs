@@ -6,7 +6,7 @@ using Fusion.Sockets;
 
 public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 {
-    [SerializeField] private NetworkPrefabRef _playerPrefab;
+    [SerializeField] private NetworkPrefabRef[] _playerPrefabs;
     [SerializeField] private int _minPlayersToStart = 2;
     [SerializeField] private Transform[] _spawnPoints;
     private bool _matchStarted;
@@ -64,9 +64,22 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
             ? _spawnPoints[spawnIndex].position
             : Vector3.zero;
 
-        NetworkObject playerObject = runner.Spawn(_playerPrefab, pos, Quaternion.identity, player);
-        //runner.Spawn(_playerPrefab, pos, Quaternion.identity, player);
+        int skinIndex = GetSkinIndex(runner, player);
+
+        NetworkObject playerObject = runner.Spawn(_playerPrefabs[skinIndex], pos, Quaternion.identity, player);
         runner.SetPlayerObject(player, playerObject);
+    }
+
+    private int GetSkinIndex(NetworkRunner runner, PlayerRef player)
+    {
+        byte[] token = runner.GetPlayerConnectionToken(player);
+       //Debug.Log($"[Spawner] player={player}, token={(token == null ? "NULL" : BitConverter.ToInt32(token, 0).ToString())}");
+
+        if (token == null || token.Length < sizeof(int)) return 0;
+
+        int skinIndex = BitConverter.ToInt32(token, 0);
+
+        return Mathf.Clamp(skinIndex, 0, _playerPrefabs.Length - 1);
     }
 
     public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)

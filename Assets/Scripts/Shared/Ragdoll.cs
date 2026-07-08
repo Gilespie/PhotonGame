@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Ragdoll : NetworkBehaviour
 {
-    [SerializeField] NetworkRigidbody3D[] _ragdollRBs;
+    [SerializeField] Rigidbody[] _ragdollRBs;
     [SerializeField] NetworkMecanimAnimator _animatorNetwork;
     [SerializeField] Animator _animator;
     [SerializeField] Collider _collider;
@@ -14,7 +14,7 @@ public class Ragdoll : NetworkBehaviour
     {
         foreach (var rb in _ragdollRBs)
         {
-            rb.Rigidbody.isKinematic = true;
+            rb.isKinematic = true;
         }
 
         _animator.enabled = true;
@@ -32,7 +32,7 @@ public class Ragdoll : NetworkBehaviour
 
         foreach (var rb in _ragdollRBs)
         {
-            rb.Rigidbody.isKinematic = false;
+            rb.isKinematic = false;
         } 
     }
 }

@@ -59,8 +59,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c76d7d273d7466d44a5433171c82260f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerPrefab:
-    RawGuidValue: eb91ab21e1ff65c45a775551608b5d53
+  _playerPrefabs:
+  - RawGuidValue: 16f58abad69d72e46b99564f4a6f129d
+  - RawGuidValue: 20dd91a26acbbd74caa7c10c78d25a96
   _minPlayersToStart: 1
   _spawnPoints: []
 --- !u!114 &4874015857150909375

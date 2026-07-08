@@ -20,9 +20,4 @@ public class CharacterAnimationController : NetworkBehaviour
     {
         _animator.Animator.SetTrigger(param);
     }
-
-    /*public void SetAnimator(NetworkMecanimAnimator animator)
-    {
-        _animator = animator;
-    }*/
 }

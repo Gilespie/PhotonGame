@@ -19,16 +19,9 @@ public class Player : NetworkBehaviour
     [Networked] public NetworkBool _isGround { get; private set; }
 
     Camera _camera;
-    
-    [SerializeField] CharacterMeshSelector _meshSelector;
 
     public override void Spawned()
     {
-        int selectedMeshIndex = PlayerPrefs.GetInt("PlayerSkin");
-
-        _meshSelector.SelectMesh(selectedMeshIndex);
-        //_animationController.SetAnimator(_meshSelector.MecanimAnims[selectedMeshIndex]);
-
         if (HasInputAuthority)
         {
             _camera = Camera.main;
@@ -42,7 +35,6 @@ public class Player : NetworkBehaviour
     {
         _isGround = _groundRaycast.IsRaycasting(Vector3.down);
         _movement.SetGrounded(_isGround);
-        //_animationController.SetBool(AnimParams.Air, !_isGround);
 
         if (!GetInput(out NetworkInputData inputs)) return;
         if (_health.IsDead) return;

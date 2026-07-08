@@ -26,7 +26,7 @@ public class GameManager : NetworkBehaviour
         if (!_players.Contains(playerRef))
         {
             _players.Add(playerRef);
-            Debug.Log($"[GameManager] Added {playerRef}, total: {_players.Count}");
+            //Debug.Log($"[GameManager] Added {playerRef}, total: {_players.Count}");
         }
     }
 

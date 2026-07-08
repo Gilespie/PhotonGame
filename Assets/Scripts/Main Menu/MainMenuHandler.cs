@@ -70,13 +70,13 @@ public class MainMenuHandler : MonoBehaviour
 
     void Btn_SaveSkinPlayer()
     {
-        PlayerPrefs.SetString("PlayerSkin", _skins[0].ToString());
+        PlayerPrefs.SetInt("PlayerSkin", _skins[0]);
         
     }
 
     void Btn_SaveSkinPlayer2()
     {
-        PlayerPrefs.SetString("PlayerSkin", _skins[1].ToString());
+        PlayerPrefs.SetInt("PlayerSkin", _skins[1]);
     }
 
     void Btn_SaveNickName()

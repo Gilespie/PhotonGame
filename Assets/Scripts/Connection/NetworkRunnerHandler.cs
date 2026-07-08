@@ -37,7 +37,7 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
         }
         else
         {
-            Debug.Log($"[Custom Msg] Joined Lobby");
+            //Debug.Log($"[Custom Msg] Joined Lobby");
 
             OnJoinedLobby();
         }
@@ -60,11 +60,15 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     {
         _currentRunner.ProvideInput = true;
 
+        int skinIndex = PlayerPrefs.GetInt("PlayerSkin", 0);
+        //Debug.Log("[Custom Msg] Player Skin Index: " + skinIndex);
+
         var result = await _currentRunner.StartGame(new StartGameArgs()
         {
             GameMode = gameMode,
             Scene = SceneRef.FromIndex(sceneIndex),
-            SessionName = sessionName
+            SessionName = sessionName,
+            ConnectionToken = BitConverter.GetBytes(skinIndex)
         });
         
         if (!result.Ok)
