@@ -10,7 +10,8 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
     [SerializeField] private Transform[] _spawnPoints;
     private bool _matchStarted;
     private LocalInputs _localInputs;
-    private int _playerIndex = 0;
+    private readonly Dictionary<PlayerRef, int> _assignedSpawnIndex = new Dictionary<PlayerRef, int>();
+    private int _nextClientSpawnIndex = 1;
 
     private void RefreshSpawnPoints()
     {
@@ -26,7 +27,7 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 
         if (_matchStarted)
         {
-            SpawnPlayer(runner, player, _playerIndex++ % Mathf.Max(_spawnPoints.Length, 1));
+            SpawnPlayer(runner, player, GetSpawnIndex(runner, player));
             return;
         }
 
@@ -35,21 +36,26 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
         if (count >= GameManager.Instance.MinPlayersToStart)
         {
             _matchStarted = true;
-            int index = 0;
             foreach (PlayerRef p in runner.ActivePlayers)
-                SpawnPlayer(runner, p, index++ % Mathf.Max(_spawnPoints.Length, 1));
+                SpawnPlayer(runner, p, GetSpawnIndex(runner, p));
         }
-
-       /* if (runner.IsServer) //work nicknames
-        {
-            runner.Spawn(_playerPrefab, null, null, player);
-        }*/
     }
 
-    public void OnInput(NetworkRunner runner, NetworkInput input)//vamos a usar el callback de OnInput
+    private int GetSpawnIndex(NetworkRunner runner, PlayerRef player)
     {
-        //Solo si soy local //consigo los local inputs //seteo los inputs
+        if (_assignedSpawnIndex.TryGetValue(player, out var cachedIndex))
+            return cachedIndex;
 
+        int spawnIndex = player == runner.LocalPlayer ? 0 : _nextClientSpawnIndex++; 
+
+        spawnIndex %= Mathf.Max(_spawnPoints.Length, 1);
+
+        _assignedSpawnIndex[player] = spawnIndex;
+        return spawnIndex;
+    }
+
+    public void OnInput(NetworkRunner runner, NetworkInput input)
+    {
         if (!NetworkPlayer.Local) return;
 
         _localInputs ??= NetworkPlayer.Local.LocalInputs;
@@ -85,7 +91,10 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
         runner.Shutdown();
     }
 
-    public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) { }
+    public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
+    {
+        _assignedSpawnIndex.Remove(player);
+    }
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }

@@ -19,7 +19,8 @@ public class GameManager : NetworkBehaviour
     [SerializeField] Button _rtmButton2;
     [SerializeField] Button _rtmButton3;
 
-    private List<PlayerRef> _players;   //PlayerRef sirve como identificacion de cada cliente conectado
+    private List<PlayerRef> _players;
+    private readonly HashSet<PlayerRef> _playersAtFinish = new HashSet<PlayerRef>();
 
     private void Awake()
     {
@@ -42,50 +43,70 @@ public class GameManager : NetworkBehaviour
     public void AddToList(Player player)
     {
         var playerRef = player.Object.InputAuthority;
-        //Consigo el objecto con state autority
-        //lo agrego a _players si no lo contiene.
 
         if (!_players.Contains(playerRef))
         {
             _players.Add(playerRef);
-            //Debug.Log($"[GameManager] Added {playerRef}, total: {_players.Count}");
         }
     }
 
     [Rpc(RpcSources.All, RpcTargets.All)]
     public void RPC_Defeat(PlayerRef loser)
     {
-        bool removed = _players.Remove(loser);
+        _players.Remove(loser);
 
         if (loser == Runner.LocalPlayer)
             ShowDefeatPanel();
 
         if (!HasStateAuthority) return;
 
-        switch (_players.Count)
+        if (_players.Count == 0)
         {
-            case 1:
-                RPC_Win(_players[0]);
-                break;
-            case 0:
-                RPC_Draw();
-                break;
+            RPC_LoseAll(); 
+        }
+        else
+        {
+            CheckFinishCondition(); 
         }
     }
 
-    //[RpcTarget] El llamado del RPC va a ir dirigido a ese jugador
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    private void RPC_Win(PlayerRef winner)
+    public void PlayerEnteredFinish(PlayerRef player)
     {
-        if (winner == Runner.LocalPlayer)
-            ShowWinPanel();
+        if (!HasStateAuthority) return;
+
+        _playersAtFinish.Add(player);
+        CheckFinishCondition();
+    }
+
+    public void PlayerExitedFinish(PlayerRef player)
+    {
+        if (!HasStateAuthority) return;
+
+        _playersAtFinish.Remove(player);
+    }
+
+    void CheckFinishCondition()
+    {
+        if (_players.Count == 0) return; 
+
+        foreach (var p in _players)
+        {
+            if (!_playersAtFinish.Contains(p)) return;
+        }
+
+        RPC_WinAll();
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    private void RPC_Draw()
+    private void RPC_WinAll()
+    {
+        ShowWinPanel();
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void RPC_LoseAll()
     {
         ShowDefeatPanel();
-        //Debug.Log("[GameManager] Match ended in a draw.");
     }
 
     void ShowWinPanel()
