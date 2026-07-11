@@ -10,7 +10,7 @@ public class MovementComponent : NetworkBehaviour
     [SerializeField] float _crouchSpeed = 3f;
     [SerializeField] float _sprintSpeed = 8f;
     [SerializeField] float _jumpForce = 5f;
-    [Networked] public float _currentSpeed { get; set; }
+    float _currentSpeed { get; set; }
 
     [Header("References")]
     [SerializeField] NetworkRigidbody3D _rb;

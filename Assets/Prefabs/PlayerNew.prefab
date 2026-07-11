@@ -1947,6 +1947,7 @@ MonoBehaviour:
   _movement: {fileID: 1472474481005220215}
   _healthSystem: {fileID: 577549235567698703}
   _ragdoll: {fileID: 148318375279938702}
+  _bloodVFX: {fileID: 0}
 --- !u!1 &4475836793075372292
 GameObject:
   m_ObjectHideFlags: 0
@@ -3798,6 +3799,7 @@ MonoBehaviour:
   - {fileID: 7824964431430048721}
   - {fileID: 1354492324558253811}
   - {fileID: 7302153620256590648}
+  - {fileID: 6110872969121056400}
   - {fileID: 577549235567698703}
   - {fileID: 996544923378881573}
   - {fileID: 1472474481005220215}
@@ -3923,6 +3925,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxScore: 9999
+  __currentScore: 0
 --- !u!114 &577549235567698703
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3985,7 +3988,6 @@ MonoBehaviour:
   _crouchSpeed: 3
   _sprintSpeed: 8
   _jumpForce: 5
-  __currentSpeed: 0
   _rb: {fileID: 7824964431430048721}
   _JumpCounter: 0
   _IsCrouching: 0
@@ -4020,6 +4022,7 @@ MonoBehaviour:
   _health: {fileID: 577549235567698703}
   _maxDeaths: 3
   _delayToRespawn: 3
+  _rb: {fileID: 0}
 --- !u!1 &8197445980673343475
 GameObject:
   m_ObjectHideFlags: 0

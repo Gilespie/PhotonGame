@@ -7,7 +7,8 @@ public class Enemy : NetworkBehaviour
 {
     public Action OnEnemyDead = delegate { };
 
-    [SerializeField] float _speed = 5f;
+    [SerializeField] float _speedMin = 5f;
+    [SerializeField] float _speedMax = 5f;
     [SerializeField] float _rotationSpeed = 10f;
 
     [SerializeField] NetworkRigidbody3D _rb;
@@ -18,6 +19,7 @@ public class Enemy : NetworkBehaviour
 
     [SerializeField] float _despawnInterval = 15f;
     [Networked] TickTimer _tickTimer { get; set; }
+    float _currentSpeed;
 
     [Header("Attack")]
     [SerializeField] float _damage = 25f;
@@ -31,7 +33,7 @@ public class Enemy : NetworkBehaviour
 
     public override void Spawned()
     {
-        _speed = UnityEngine.Random.Range(5f, 10f);
+        _currentSpeed = UnityEngine.Random.Range(_speedMin, _speedMax);
         _health.OnDead += OnDied;
         _health.OnHit += OnHited;
     }
@@ -117,9 +119,9 @@ public class Enemy : NetworkBehaviour
 
         Vector3 direction = _player.transform.position - _rb.Rigidbody.position;
 
-        _rb.Rigidbody.MovePosition(_rb.Rigidbody.position + direction.normalized * _speed * Runner.DeltaTime);
+        _rb.Rigidbody.MovePosition(_rb.Rigidbody.position + direction.normalized * _currentSpeed * Runner.DeltaTime);
 
-        _mecanimAnimator.Animator.SetFloat(AnimParams.Speed, _speed);
+        _mecanimAnimator.Animator.SetFloat(AnimParams.Speed, _currentSpeed);
     }
 
     public void SetBoolAttacking(bool attacking)

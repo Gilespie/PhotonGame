@@ -1,15 +1,21 @@
+using Fusion;
 using UnityEngine;
 
-public class Coin : MonoBehaviour
+public class Coin : NetworkBehaviour
 {
     [SerializeField] int _scorePoints = 50;
+    bool _collected;
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.TryGetComponent(out Wallet player))
+        if (_collected) return;
+        if (!Object.HasStateAuthority) return;
+
+        if (other.TryGetComponent(out Wallet wallet))
         {
-            player.AddScore(_scorePoints);
-            Destroy(gameObject);
+            _collected = true;
+            wallet.RPC_AddScore(_scorePoints);
+            Runner.Despawn(Object);
         }
     }
 }

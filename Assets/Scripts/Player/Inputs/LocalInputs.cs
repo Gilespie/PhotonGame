@@ -35,7 +35,7 @@ public class LocalInputs : MonoBehaviour
 
         _networkInputData.MovementInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 
-        _networkInputData.AimDirection = GetAimDirection();
+        //_networkInputData.AimDirection = GetAimDirection();
 
         _networkInputData.networkButtons.Set(MyButtons.Interact, _isInteractPressed);
         _isInteractPressed = false;
@@ -58,7 +58,7 @@ public class LocalInputs : MonoBehaviour
         return _networkInputData;
     }
 
-    Vector3 GetAimDirection()
+    /*Vector3 GetAimDirection()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
@@ -73,5 +73,5 @@ public class LocalInputs : MonoBehaviour
         }
 
         return transform.forward;
-    }
+    }*/
 }
