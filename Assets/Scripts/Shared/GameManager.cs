@@ -21,6 +21,7 @@ public class GameManager : NetworkBehaviour
 
     private List<PlayerRef> _players;
     private readonly HashSet<PlayerRef> _playersAtFinish = new HashSet<PlayerRef>();
+    private bool _gameEnded;
 
     private void Awake()
     {
@@ -53,26 +54,16 @@ public class GameManager : NetworkBehaviour
     [Rpc(RpcSources.All, RpcTargets.All)]
     public void RPC_Defeat(PlayerRef loser)
     {
-        _players.Remove(loser);
+        if (_gameEnded) return;
+        _gameEnded = true;
 
-        if (loser == Runner.LocalPlayer)
-            ShowDefeatPanel();
-
-        if (!HasStateAuthority) return;
-
-        if (_players.Count == 0)
-        {
-            RPC_LoseAll(); 
-        }
-        else
-        {
-            CheckFinishCondition(); 
-        }
+        ShowDefeatPanel();
     }
 
     public void PlayerEnteredFinish(PlayerRef player)
     {
         if (!HasStateAuthority) return;
+        if (_gameEnded) return;
 
         _playersAtFinish.Add(player);
         CheckFinishCondition();
@@ -100,13 +91,10 @@ public class GameManager : NetworkBehaviour
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     private void RPC_WinAll()
     {
-        ShowWinPanel();
-    }
+        if (_gameEnded) return;
+        _gameEnded = true;
 
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    private void RPC_LoseAll()
-    {
-        ShowDefeatPanel();
+        ShowWinPanel();
     }
 
     void ShowWinPanel()

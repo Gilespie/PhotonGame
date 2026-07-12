@@ -34,7 +34,7 @@ public class Enemy : NetworkBehaviour
     public override void Spawned()
     {
         _currentSpeed = UnityEngine.Random.Range(_speedMin, _speedMax);
-        _health.OnDead += OnDied;
+        _health.OnDeadChanged += OnDeadStateChanged;
         _health.OnHit += OnHited;
     }
 
@@ -68,18 +68,19 @@ public class Enemy : NetworkBehaviour
 
     public override void Despawned(NetworkRunner runner, bool hasState)
     {
-        _health.OnDead -= OnDied;
+        _health.OnDeadChanged -= OnDeadStateChanged;
         _health.OnHit -= OnHited;
     }
 
-    void OnDied()
+    void OnDeadStateChanged(bool isDead)
     {
+        if (!isDead) return;
+
+        _ragdoll.ActivateRagdoll(); 
+
         if (!HasStateAuthority) return;
 
         OnEnemyDead();
-
-        _ragdoll.ActivateRagdoll();
-
         _tickTimer = TickTimer.CreateFromSeconds(Runner, _despawnInterval);
     }
 
