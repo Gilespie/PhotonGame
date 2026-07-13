@@ -112,7 +112,7 @@ CapsuleCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 131072
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -183,7 +183,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2373c67dcce1ecd4e90d23154ea1ea8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 5
+  _speedMin: 5
+  _speedMax: 5
   _rotationSpeed: 10
   _rb: {fileID: 1268539726467176523}
   _mecanimAnimator: {fileID: 5737893938516958257}

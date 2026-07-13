@@ -112,11 +112,7 @@ public class GameManager : NetworkBehaviour
         _rtmButton1.interactable = false;
         _rtmButton2.interactable = false;
 
-        var runner = Runner;
-
-        if (runner != null)
-            await runner.Shutdown();
-
-        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+        if (Runner != null)
+            await Runner.Shutdown();
     }
 }
