@@ -11,6 +11,7 @@ public class RespawnSystem : NetworkBehaviour
     [SerializeField] NetworkRigidbody3D _rb;
     byte _deathCount;
     Vector3 _initialSpawnPosition;
+    [Networked] TickTimer _respawnTimer { get; set; }
 
     public override void Spawned()
     {
@@ -21,29 +22,25 @@ public class RespawnSystem : NetworkBehaviour
         _health.OnDead += OnDied;
     }
 
-    void OnDied()
+    public override void FixedUpdateNetwork()
     {
         if (!HasStateAuthority) return;
 
-        _deathCount++;
-
-        if (_deathCount >= _maxDeaths)
+        if (_respawnTimer.Expired(Runner))
         {
-            DisconnectPlayer();
-            return;
+            _respawnTimer = TickTimer.None;
+            Vector3 respawnPos = GetRespawnPosition();
+            TeleportTo(respawnPos);
+            _health.Resurrect();
         }
-
-        StartCoroutine(RespawnCooldown());
     }
 
-    IEnumerator RespawnCooldown()
+    void OnDied()
     {
-        yield return new WaitForSeconds(_delayToRespawn);
-
-        Vector3 respawnPos = GetRespawnPosition();
-        TeleportTo(respawnPos);
-
-        _health.Resurrect();
+        if (!HasStateAuthority) return;
+        _deathCount++;
+        if (_deathCount >= _maxDeaths) { DisconnectPlayer(); return; }
+        _respawnTimer = TickTimer.CreateFromSeconds(Runner, _delayToRespawn);
     }
 
     Vector3 GetRespawnPosition()

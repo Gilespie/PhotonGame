@@ -19,6 +19,8 @@ public class Ragdoll : NetworkBehaviour
 
         _animator.enabled = true;
         _animatorNetwork.enabled = true;
+        _animator.Rebind();
+        _animator.Update(0f);
         _collider.enabled = true;
         _mainRB.Rigidbody.isKinematic = false;
     }

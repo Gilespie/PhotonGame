@@ -62,7 +62,6 @@ MonoBehaviour:
   _playerPrefabs:
   - RawGuidValue: 16f58abad69d72e46b99564f4a6f129d
   - RawGuidValue: 20dd91a26acbbd74caa7c10c78d25a96
-  _minPlayersToStart: 1
   _spawnPoints: []
 --- !u!114 &4874015857150909375
 MonoBehaviour:
