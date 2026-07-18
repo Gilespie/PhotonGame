@@ -12,7 +12,6 @@ public class MainMenuHandler : MonoBehaviour
     [Header("Panels")]
     [SerializeField] private GameObject _initialPanel;
     [SerializeField] private GameObject _creditsPanel;
-    [SerializeField] private GameObject _profilePanel;
     [SerializeField] private GameObject _statusPanel;
     [SerializeField] private GameObject _sessionBrowserPanel;
     [SerializeField] private GameObject _hostGamePanel;
@@ -21,7 +20,6 @@ public class MainMenuHandler : MonoBehaviour
     [SerializeField] private Button _hostPanelBTN;
     [SerializeField] private Button _hostGameBTN;
     [SerializeField] private Button _creditsBTN;
-    [SerializeField] private Button _profileBTN;
     [SerializeField] private Button _saveSkinBTN1;
     [SerializeField] private Button _saveSkinBTN2;
     [SerializeField] private Button _saveNicknameBTN;
@@ -48,7 +46,6 @@ public class MainMenuHandler : MonoBehaviour
         _backFromCreditsBTN.onClick.AddListener(Btn_CreditsBack);
         _backFromProfileBTN.onClick.AddListener(Btn_ProfileBack);
         _exitBTN.onClick.AddListener(Btn_Quit);
-        _profileBTN.onClick.AddListener(Btn_ProfilePanel);
 
         _saveSkinBTN1.onClick.AddListener(Btn_SaveSkinPlayer);
         _saveSkinBTN2.onClick.AddListener(Btn_SaveSkinPlayer2);
@@ -112,16 +109,10 @@ public class MainMenuHandler : MonoBehaviour
         _creditsPanel.SetActive(false);
     }
 
-    void Btn_ProfilePanel()
-    {
-        _initialPanel.SetActive(false);
-        _profilePanel.SetActive(true);
-    }
-
     void Btn_ProfileBack()
     {
         _initialPanel.SetActive(true);
-        _profilePanel.SetActive(false);
+        _sessionBrowserPanel.SetActive(false);
     }
 
     void Btn_Quit()

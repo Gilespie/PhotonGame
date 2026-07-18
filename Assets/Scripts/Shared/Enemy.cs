@@ -30,6 +30,7 @@ public class Enemy : NetworkBehaviour
     Player _player;
     float sqrtDistance;
     bool _despawnQueued;
+    bool _deathHandled;
 
     public override void Spawned()
     {
@@ -42,11 +43,19 @@ public class Enemy : NetworkBehaviour
     {
         if (_health.IsDead)
         {
-            if (!_despawnQueued && _tickTimer.Expired(Runner))
+            if (HasStateAuthority && !_deathHandled)
+            {
+                _deathHandled = true;
+                _tickTimer = TickTimer.CreateFromSeconds(Runner, _despawnInterval);
+                OnEnemyDead?.Invoke();
+            }
+
+            if (HasStateAuthority && !_despawnQueued && _tickTimer.Expired(Runner))
             {
                 _despawnQueued = true;
                 Runner.Despawn(Object);
             }
+
             return;
         }
         
@@ -78,10 +87,7 @@ public class Enemy : NetworkBehaviour
 
         _ragdoll.ActivateRagdoll(); 
 
-        if (!HasStateAuthority) return;
-
-        OnEnemyDead();
-        _tickTimer = TickTimer.CreateFromSeconds(Runner, _despawnInterval);
+        //if (!HasStateAuthority) return;
     }
 
     void OnHited()

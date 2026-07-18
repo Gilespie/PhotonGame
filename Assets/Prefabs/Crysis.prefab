@@ -1523,6 +1523,10 @@ MonoBehaviour:
   _CurrentHealth: 0
   _IsDead:
     _value: 0
+  _IsRessurrectable:
+    _value: 1
+  _IsGodMode:
+    _value: 1
 --- !u!114 &3341803670502092410
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -67,7 +67,7 @@ MonoBehaviour:
   _winImage: {fileID: 0}
   _loseImage: {fileID: 0}
   _waitingPanel: {fileID: 0}
-  _minPlayersToStart: 1
+  _minPlayersToStart: 2
   _rtmButton1: {fileID: 0}
   _rtmButton2: {fileID: 0}
   _rtmButton3: {fileID: 0}

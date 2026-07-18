@@ -11,6 +11,8 @@ public class HealthSystem : NetworkBehaviour
     [Networked, OnChangedRender(nameof(OnDeadStateChanged))]
     public NetworkBool IsDead { get; private set; }
 
+    [Networked] public NetworkBool IsGodMode { get; private set; }
+
     public event Action OnDead = delegate { };
     public event Action<float> OnHealthUpdate = delegate { };
     public event Action<bool> OnDeadChanged = delegate { };
@@ -40,6 +42,8 @@ public class HealthSystem : NetworkBehaviour
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPC_TakeDamage(float damage)
     {
+        if (IsGodMode) return;
+
         TakeDamage(damage);
     }
 
@@ -55,7 +59,7 @@ public class HealthSystem : NetworkBehaviour
         if (CurrentHealth <= 0)
         {
             IsDead = true;
-            OnDead();
+            OnDead?.Invoke();
         }
     }
 
