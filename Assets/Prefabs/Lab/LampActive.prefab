@@ -125,8 +125,8 @@ MonoBehaviour:
     m_PreInfinity: 1
     m_PostInfinity: 0
     m_RotationOrder: 4
-  _flickerSpeed: 1
-  _maxIntensity: 300
+  _flickerSpeed: 0.65
+  _maxIntensity: 1000
   _light: {fileID: 5625279171595059729}
 --- !u!114 &-8275992744351327639
 MonoBehaviour:
