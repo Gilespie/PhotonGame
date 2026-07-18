@@ -12,6 +12,7 @@ public class Ragdoll : NetworkBehaviour
 
     public void DisableRagdoll()
     {
+        Debug.Log($"DisableRagdoll {gameObject.name}");
         foreach (var rb in _ragdollRBs)
         {
             rb.isKinematic = true;
@@ -27,6 +28,8 @@ public class Ragdoll : NetworkBehaviour
 
     public void ActivateRagdoll()
     {
+        Debug.Log($"ActivateRagdoll {gameObject.name}");
+
         _animator.enabled = false;
         _animatorNetwork.enabled = false;   
         _collider.enabled = false;

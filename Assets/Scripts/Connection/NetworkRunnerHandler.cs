@@ -13,7 +13,8 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
 
     public event Action OnJoinedLobby = delegate { };
     public event Action<List<SessionInfo>> OnSessionListUpdate = delegate { };
-    
+    public static bool ReturnedFromDisconnect;
+
     #region Lobby
     public void JoinLobby()
     {
@@ -103,12 +104,14 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
     {
+        ReturnedFromDisconnect = true;
         UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
     }
 
     public void OnConnectedToServer(NetworkRunner runner) { }
     public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
     {
+        ReturnedFromDisconnect = true;
         runner.Shutdown();
         UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
     }

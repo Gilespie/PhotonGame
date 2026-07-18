@@ -56,6 +56,12 @@ public class MainMenuHandler : MonoBehaviour
             _statusPanel.SetActive(false);
             _sessionBrowserPanel.SetActive(true);
         };
+
+        if (NetworkRunnerHandler.ReturnedFromDisconnect)
+        {
+            NetworkRunnerHandler.ReturnedFromDisconnect = false;
+            Btn_JoinLobby();
+        }
     }
 
     void Btn_JoinLobby()
